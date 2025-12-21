@@ -17,10 +17,13 @@ console.log(`🔧 Conectando a: ${config.host}`);
 if (config.use_env_variable) {
   // Con variable de entorno
   sequelize = new Sequelize(process.env[config.use_env_variable], {
-    dialect: config.dialect,
-    dialectOptions: config.dialectOptions,
-    logging: config.logging,
-    pool: config.pool
+    dialect: "mysql",
+    dialectOptions: require("mysql2"),
+    pool: {
+      max: 5,
+      min: 0,
+      idle: 10000
+    }
   });
 } else {
   // CONEXIÓN DIRECTA - CORREGIDA
