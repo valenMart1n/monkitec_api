@@ -10,41 +10,74 @@ const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
 
 let sequelize;
+
+console.log(`🔧 Entorno: ${env}`);
+console.log(`🔧 Conectando a: ${config.host}`);
+
 if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+  // Con variable de entorno
+  sequelize = new Sequelize(process.env[config.use_env_variable], {
+    dialect: config.dialect,
+    dialectOptions: config.dialectOptions,
+    logging: config.logging,
+    pool: config.pool
+  });
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  // CONEXIÓN DIRECTA - CORREGIDA
+  const { database, username, password, ...options } = config;
+  
+  sequelize = new Sequelize(
+    database,
+    username, 
+    password, 
+    {
+      host: options.host,
+      port: options.port || 3306,
+      dialect: options.dialect || 'mysql',
+      // ✅ CORRECCIÓN: Combinar SSL con config existente
+      dialectOptions: env === 'production' ? {
+        ...options.dialectOptions,
+        ssl: {
+          require: true,
+          rejectUnauthorized: false
+        }
+      } : options.dialectOptions,
+      logging: options.logging,
+      pool: options.pool
+    }
+  );
 }
 
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (
-      file.indexOf('.') !== 0 &&
-      file !== basename &&
-      file.slice(-3) === '.js' &&
-      file.indexOf('.test.js') === -1
-    );
+// Verificación inmediata
+sequelize.authenticate()
+  .then(() => {
+    console.log(`✅✅✅ CONEXIÓN EXITOSA a ${config.host}`);
   })
+  .catch(err => {
+    console.error('❌❌❌ FALLA DE CONEXIÓN:');
+    console.error('Mensaje:', err.message);
+    console.error('Código:', err.code);
+    console.error('SSL config:', config.dialectOptions);
+  });
+
+// Carga de modelos
+fs.readdirSync(__dirname)
+  .filter(file => (
+    file.indexOf('.') !== 0 &&
+    file !== basename &&
+    file.slice(-3) === '.js' &&
+    file.indexOf('.test.js') === -1
+  ))
   .forEach(file => {
     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
     db[model.name] = model;
   });
 
 Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
+  if (db[modelName].associate) db[modelName].associate(db);
 });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-sequelize.authenticate()
-  .then(() => {
-    console.log(`✅ Conectado a MySQL (${isProduction ? 'Producción' : 'Desarrollo'})`);
-  })
-  .catch(err => {
-    console.error('❌ Error de conexión MySQL:', err.message);
-  });
 
 module.exports = db;
