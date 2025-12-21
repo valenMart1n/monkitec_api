@@ -3,6 +3,7 @@
   "builds": [
     {
       "src": "app.js",
+      "MYSQL2_FORCE_PURE_JS": "true",
       "use": "@vercel/node",
       "config": {
         "maxLambdaSize": "15mb",
