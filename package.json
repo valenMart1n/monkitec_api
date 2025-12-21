@@ -7,7 +7,7 @@
     "start": "node app.js",
     "dev": "node app.js",
     "prod": "NODE_ENV=production node app.js",
-    "build": "npm rebuild mysql2 --target=node18 --arch=x64 --platform=linux",
+    "build": "npm rebuild mysql2 --target=node24 --arch=x64 --platform=linux",
     "vercel-build": "npm install && npm install sequelize && npm rebuild mysql2 --target=node18 --arch=x64 --platform=linux"
   },
   "dependencies": {
