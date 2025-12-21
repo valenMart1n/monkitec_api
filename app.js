@@ -130,6 +130,14 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+app.get('/api/ping', (req, res) => {
+  res.json({ 
+    status: 'pong', 
+    timestamp: new Date().toISOString(),
+    cloudinary: !!process.env.CLOUDINARY_CLOUD_NAME
+  });
+});
+
 // 8. Rutas principales (SIN cors() individual)
 app.use("/cart", cart);
 app.use("/variations", variations);
