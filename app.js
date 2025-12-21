@@ -169,5 +169,6 @@ app.listen(port, () => {
     console.log(`   - Desarrollo: localhost:3000, localhost:3001, monkitec.vercel.app`);
     console.log(`   - Producción: monkitec.vercel.app`);
     console.log(`🔐 Cookies: secure=${!isDevelopment ? 'true (HTTPS)' : 'false (HTTP)'}`);
+    console.log("")
     console.log(`📁 Cloudinary: ${process.env.CLOUDINARY_CLOUD_NAME ? '✅ Configurado' : '❌ No configurado'}`);
 });
