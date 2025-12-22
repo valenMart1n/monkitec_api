@@ -1,4 +1,8 @@
 'use strict';
+process.env.MYSQL2_FORCE_PURE_JS = '1';
+
+const mysql2 = require('mysql2/promise'); // Versión promise
+
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
@@ -19,6 +23,13 @@ if (config.use_env_variable) {
   // Con variable de entorno
   sequelize = new Sequelize(process.env[config.use_env_variable], {
     dialect: "mysql",
+    dialectModule: mysql2,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    },
     pool: {
       max: 5,
       min: 0,
