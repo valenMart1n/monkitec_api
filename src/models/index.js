@@ -46,8 +46,7 @@ if (config.use_env_variable) {
       host: options.host,
       port: options.port || 3306,
       dialect: options.dialect || 'mysql',
-      dialectModule: mysql2, // ← AÑADE ESTO AQUÍ TAMBIÉN
-      // ✅ CORRECCIÓN: Combinar SSL con config existente
+      dialectModule: mysql2,
       dialectOptions: env === 'production' ? {
         ...options.dialectOptions,
         ssl: {
@@ -61,7 +60,6 @@ if (config.use_env_variable) {
   );
 }
 
-// Verificación inmediata
 sequelize.authenticate()
   .then(() => {
     console.log(`✅✅✅ CONEXIÓN EXITOSA a ${config.host}`);
@@ -73,7 +71,6 @@ sequelize.authenticate()
     console.error('SSL config:', config.dialectOptions);
   });
 
-// Carga de modelos (ASSOCIATES INTACTOS)
 fs.readdirSync(__dirname)
   .filter(file => (
     file.indexOf('.') !== 0 &&

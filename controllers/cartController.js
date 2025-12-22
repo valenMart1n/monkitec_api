@@ -23,7 +23,7 @@ let cart = {
         maxAge: 1000 * 60 * 60 * 24 * 30, // 30 días
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production', 
-        sameSite: 'lax',
+        sameSite: 'none',
         path: "/"
     });
 
@@ -55,7 +55,7 @@ let cart = {
             httpOnly: true, 
             path: '/', 
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax' 
+            sameSite: 'none' 
         });
 
         res.json({
@@ -79,7 +79,7 @@ let cart = {
             path: '/',
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax'
+            sameSite: 'none'
         });
 
         res.json({
