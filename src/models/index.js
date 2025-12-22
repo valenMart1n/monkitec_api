@@ -1,12 +1,12 @@
-'use strict';
+// ELIMINA ESTA LÍNEA → 'use strict';
 process.env.MYSQL2_FORCE_PURE_JS = '1';
 
-const mysql2 = require('mysql2'); // Versión promise
+const mysql2 = require('mysql2'); // OK
 
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
-const process = require('process');
+// ELIMINA ESTA LÍNEA → const process = require('process');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
@@ -18,8 +18,6 @@ console.log(`🔧 Entorno: ${env}`);
 console.log(`🔧 Conectando a: ${config.host}`);
 
 if (config.use_env_variable) {
-  
-
   // Con variable de entorno
   sequelize = new Sequelize(process.env[config.use_env_variable], {
     dialect: "mysql",
@@ -48,6 +46,7 @@ if (config.use_env_variable) {
       host: options.host,
       port: options.port || 3306,
       dialect: options.dialect || 'mysql',
+      dialectModule: mysql2, // ← AÑADE ESTO AQUÍ TAMBIÉN
       // ✅ CORRECCIÓN: Combinar SSL con config existente
       dialectOptions: env === 'production' ? {
         ...options.dialectOptions,
@@ -74,7 +73,7 @@ sequelize.authenticate()
     console.error('SSL config:', config.dialectOptions);
   });
 
-// Carga de modelos
+// Carga de modelos (ASSOCIATES INTACTOS)
 fs.readdirSync(__dirname)
   .filter(file => (
     file.indexOf('.') !== 0 &&
