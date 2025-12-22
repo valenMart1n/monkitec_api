@@ -4,7 +4,7 @@
     "password": "toreto178",
     "database": "monkitec_admin",
     "host": "mysql-monkitec.alwaysdata.net",
-    "dialect": "mysql2",
+    "dialect": "mysql",
     "port": 3306,
     "logging": true
   },
@@ -13,7 +13,7 @@
     "password": "toreto178",
     "database": "monkitec_admin",
     "host": "mysql-monkitec.alwaysdata.net",
-    "dialect": "mysql2",
+    "dialect": "mysql",
     "port": 3306,
     "dialectOptions": {
       "ssl": {

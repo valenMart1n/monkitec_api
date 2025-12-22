@@ -1,5 +1,4 @@
 'use strict';
-import mysql2 from 'mysql2';
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
