@@ -1,7 +1,7 @@
 'use strict';
 process.env.MYSQL2_FORCE_PURE_JS = '1';
 
-const mysql2 = require('mysql2/promise'); // Versión promise
+const mysql2 = require('mysql2'); // Versión promise
 
 const fs = require('fs');
 const path = require('path');
