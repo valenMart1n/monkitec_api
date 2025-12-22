@@ -3,25 +3,23 @@
   "builds": [
     {
       "src": "app.js",
-      "use": "@vercel/node",
-      "config": {
-        "maxLambdaSize": "15mb",
-        "memory": 1024,
-        "maxDuration": 30
-      }
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "app.js",
-      "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+      "dest": "app.js"
     }
   ],
-  "build": {
-    "env": {
-      "MYSQL2_FORCE_PURE_JS": "1"
+  "functions": {
+    "app.js": {
+      "memory": 1024,
+      "maxDuration": 30
     }
   },
-  "installCommand": "npm install --ignore-scripts=false"
+  "env": {
+    "MYSQL2_FORCE_PURE_JS": "1"
+  },
+  "installCommand": "npm install"
 }

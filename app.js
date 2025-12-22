@@ -1,3 +1,5 @@
+process.env.MYSQL2_FORCE_PURE_JS = '1';
+console.log('🚀 MYSQL2_FORCE_PURE_JS activado:', process.env.MYSQL2_FORCE_PURE_JS);
 require('dotenv').config();
 const express = require("express");
 const cors = require('cors');
@@ -68,13 +70,12 @@ const corsOptions = {
   maxAge: 86400
 };
 
-// 2. APLICAR CORS GLOBALMENTE (¡IMPORTANTE!)
 app.use(cors(corsOptions));
 
-// 3. Manejar preflight OPTIONS con regex (para Express 5)
-app.options(/\//, cors(corsOptions)); // ← Regex que funciona en Express 5
 
-// 4. Configuración de cookies y sesión
+app.options(/\//, cors(corsOptions));
+
+
 app.use(cookieParser());
 
 app.use(session({
@@ -91,13 +92,13 @@ app.use(session({
   proxy: !isDevelopment
 }));
 
-// 5. Middlewares restantes
+
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(methodOverride('_method'));
 app.use(express.static("public"));
 
-// 6. Rutas de API
+
 app.use('/api/upload', require('./src/router/upload'));
 
 let categories = require("./src/router/categories");
