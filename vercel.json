@@ -3,7 +3,12 @@
   "builds": [
     {
       "src": "app.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "maxLambdaSize": "15mb",
+        "memory": 1024,
+        "maxDuration": 30
+      }
     }
   ],
   "routes": [
@@ -12,12 +17,6 @@
       "dest": "app.js"
     }
   ],
-  "functions": {
-    "app.js": {
-      "memory": 1024,
-      "maxDuration": 30
-    }
-  },
   "env": {
     "MYSQL2_FORCE_PURE_JS": "1"
   },
