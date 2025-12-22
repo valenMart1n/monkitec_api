@@ -1,7 +1,6 @@
 {
   "name": "monkitec-backend",
   "version": "1.0.0",
-  "description": "API para Monkitec",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
