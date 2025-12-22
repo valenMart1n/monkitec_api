@@ -20,8 +20,6 @@ if (config.use_env_variable) {
   // Con variable de entorno
   sequelize = new Sequelize(process.env[config.use_env_variable], {
     dialect: "mysql",
-    dialectModule: mysql2,
-    dialectOptions: require("mysql2"),
     pool: {
       max: 5,
       min: 0,
