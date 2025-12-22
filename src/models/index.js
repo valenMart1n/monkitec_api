@@ -1,5 +1,5 @@
 'use strict';
-
+import mysql2 from 'mysql2';
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
@@ -15,9 +15,12 @@ console.log(`🔧 Entorno: ${env}`);
 console.log(`🔧 Conectando a: ${config.host}`);
 
 if (config.use_env_variable) {
+  
+
   // Con variable de entorno
   sequelize = new Sequelize(process.env[config.use_env_variable], {
     dialect: "mysql",
+    dialectModule: mysql2,
     dialectOptions: require("mysql2"),
     pool: {
       max: 5,
