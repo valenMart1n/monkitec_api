@@ -83,7 +83,34 @@ let product_variation = {
       error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
-}
+},
+  update: async(req, res) => {
+    try{
+      const {id, stock} = req.body;
+      const variation = await db.Product_Variation.findByPk(id);
+      if(!variation){
+        res.status(500).json({
+        success: false,
+        message: 'Variación no encontrada',
+        error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+      }
+      const updateData = {};
+      updateData.stock = stock
+      variation.update(updateData);
+      res.status(200).json({
+      success: true,
+      message: 'Producto actualizado exitosamente',
+    });
+
+    }catch(error){
+      res.status(500).json({
+      success: false,
+      message: 'Error en la actualizacion',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+    }
+  }
 
 }
 module.exports = product_variation;
