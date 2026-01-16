@@ -8,7 +8,7 @@ router.get("/", products.list);
 router.post("/byCategory", products.listByCategory);
 router.post("/byId", products.getById);
 router.post("/create", 
-  uploadMiddleware.handleUpload('fields', { field: [
+  uploadMiddleware.handleUpload('fields', { fields: [
     {name: "imagen", maxCount:1},
     {name: "imagen2", maxCount: 1}
   ] }),
@@ -23,7 +23,7 @@ router.post("/update",
   }),
   products.update  
 );
-router.delete("/delete", products.delete);
+router.post("/delete", products.delete);
 
 router.get("/featured", products.last5);
 

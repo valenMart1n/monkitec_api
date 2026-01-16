@@ -42,10 +42,8 @@ let products = {
           imagenData.imagen_public_id2 = cloudinaryResult2.public_id;
         }
 
-        
-
-        
         const productData = {
+
           desc: desc,
           precio: parseInt(precio),
           category_id: parseInt(category_id),
@@ -53,10 +51,11 @@ let products = {
           ...imagenData 
         };
 
-        await Product.create(productData);
+        const newProduct = await Product.create(productData);
 
         res.status(201).json({
           success: true,
+          data: newProduct.id,
           message: 'Producto creado exitosamente'
         });
 

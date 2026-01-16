@@ -22,10 +22,14 @@ module.exports =(sequelize, dataTypes) => {
             type: dataTypes.STRING
         },
         ruta_imagen2:{
-            type: dataTypes.STRING
+            type: dataTypes.STRING,
+            allowNull: true, 
+            defaultValue: null
         },
         imagen_public_id2:{
-            type: dataTypes.STRING
+            type: dataTypes.STRING,
+            allowNull: true,  
+            defaultValue: null
         },
          stock_total: {
             type: dataTypes.INTEGER

@@ -11,12 +11,12 @@ const uploadController = {
     try {
       const { desc, precio, category_id, stock_total } = req.body;
       
-      if (!req.file) {
-        return res.status(400).json({
-          success: false,
-          message: 'Se requiere una imagen para el producto'
-        });
-      }
+     if (!req.files?.imagen?.[0]) {
+      return res.status(400).json({
+        success: false,
+        message: 'Se requiere al menos la imagen principal'
+      });
+    }
 
       const imagenData = {
         ruta_imagen: null,

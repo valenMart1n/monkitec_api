@@ -1,14 +1,68 @@
 const db = require('../src/models');
 const CloudinaryService = require("../src/services/cloudinary.service");
+const { Sequelize, Op } = require('sequelize');
 
 let categories = {
+    listAll: async (req, res) => {
+        try{
+            const result = await db.Category.findAll();
+            const categoriesArray = result.map(function(data){
+                const categoryData = {
+                    id: data.id,
+                    desc: data.desc,
+                    parent: data.parent,
+                    ruta_imagen: data.ruta_imagen,
+                    imagen_public_id: data.imagen_public_id
+                };
+                if (data.imagen_public_id) {
+                    categoryData.imagen_optimizada = {
+                        original: data.ruta_imagen,
+                        thumbnail: CloudinaryService.getThumbnailUrl ? 
+                            CloudinaryService.getThumbnailUrl(data.imagen_public_id) : 
+                            data.ruta_imagen,
+                        medium: CloudinaryService.getOptimizedUrl ? 
+                            CloudinaryService.getOptimizedUrl(data.imagen_public_id, {
+                                width: 500,
+                                height: 500,
+                                crop: 'fill',
+                                quality: 85
+                            }) : data.ruta_imagen
+                    };
+                } else {
+                    categoryData.imagen_optimizada = {
+                        original: null,
+                        thumbnail: null,
+                        medium: null,
+                        has_image: false
+                    };
+                }
+                
+                return categoryData;
+            });
+            res.json({
+                success: true,
+                count: categoriesArray.length,
+                data: categoriesArray
+            });
+
+        }catch (error) {
+            console.error('Error en list:', error);
+            res.status(500).json({ 
+                success: false,
+                error: error.message 
+            });
+        }
+    },
     list: async (req, res) => {   
         try {
             console.log("Buscando categorías principales");
             
             const result = await db.Category.findAll({
                 where: {
-                    parent: -1
+                    [Op.or]: [
+                    { parent: -1 },
+                    { parent: 0 }
+                ]
                 }
             });
             
@@ -216,6 +270,57 @@ let categories = {
             });
         }
     },
+    create: async(req, res) => {
+        try{
+            const { desc, parent } = req.body;
+
+            if(!desc || !parent){
+                res.status(400).json({
+                    success: false,
+                    message: "Error faltan campos desc, parent",
+                    error: process.env.NODE_ENV === 'development' ? error.message : undefined
+                });
+            }
+
+            let imagenData={
+                ruta_imagen: null,
+                imagen_public_id: null
+            }
+
+            if (req.file) {
+                
+                const cloudinaryResult = await CloudinaryService.uploadImage(
+                req.file.buffer,
+                'categorias'
+          );
+        
+          imagenData.ruta_imagen = cloudinaryResult.secure_url;
+          imagenData.imagen_public_id = cloudinaryResult.public_id;
+        }
+
+        const categoryData = {
+            desc: desc,
+            parent: parent,
+            ...imagenData
+        }
+
+        const newCategory = await db.Category.create(categoryData);
+
+        res.status(201).json({
+            success: true,
+            data: newCategory,
+            message: "Categoría creada exitosamente"
+        });
+
+        }catch(error){
+            console.error('❌ Error creando categoría:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Error al crear categoría',
+                error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+        }
+    },
     update: async (req, res) => {
   try {
     const { id, desc, parent } = req.body;
@@ -323,7 +428,42 @@ let categories = {
       error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
-}   
+},
+    delete: async(req, res) => {
+        try{   
+            const {id} = req.body; 
+            if(id == undefined){
+                res.status(400).json({
+                    success: false,
+                    message: "Error: No se ha recibido un id",
+                    error: process.env.NODE_ENV === 'development' ? error.message : undefined
+                });
+            }else{
+                const response = await db.Category.destroy({
+                    where: {
+                        id: id
+                    }
+                });
+                if(!response){
+                    res.status(400).json({
+                    success: false,
+                    message: "Error categoría no encontrada"
+                });       
+                }else{
+                res.status(201).json({
+                    success: true,
+                    message: "Categoría eliminada correctamente"
+                });
+                }
+            }
+        }catch(error){
+            res.status(500).json({
+                success: false,
+                message: "Error al eliminar la categoría",
+                error: process.env.NODE_ENV === 'development' ? error.message : undefined
+            });
+        }
+    }
 }
 
 module.exports = categories;
