@@ -59,12 +59,8 @@ let categories = {
             
             const result = await db.Category.findAll({
                 where: {
-                    [Op.or]: [
-                    { parent: -1 },
-                    { parent: 0 }
-                ]
-                }
-            });
+                parent: -1 
+            }});
             
             console.log(`Encontradas ${result.length} categorías principales`);
             
@@ -274,7 +270,7 @@ let categories = {
         try{
             const { desc, parent } = req.body;
 
-            if(!desc || !parent){
+            if(!desc){
                 res.status(400).json({
                     success: false,
                     message: "Error faltan campos desc, parent",
@@ -305,7 +301,7 @@ let categories = {
         }
 
         const newCategory = await db.Category.create(categoryData);
-
+        
         res.status(201).json({
             success: true,
             data: newCategory,
