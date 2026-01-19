@@ -24,9 +24,12 @@ const allowedOrigins = isDevelopment
       'http://localhost:3001',
       'http://127.0.0.1:3000',
       'http://127.0.0.1:3001',
-      'https://monkitec.vercel.app'
+      'https://monkitec.vercel.app',
+      "https://monkitec-admin.vercel.app"
     ]
-  : ['https://monkitec.vercel.app'];
+  : ['https://monkitec.vercel.app',
+      "https://monkitec-admin.vercel.app"
+  ];
 
 // Configuración CORS simple que funciona
 const corsOptions = {
