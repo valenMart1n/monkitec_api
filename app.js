@@ -158,6 +158,7 @@ const products = require("./src/router/products");
 const variations = require("./src/router/variations");
 const product_variation = require("./src/router/product-variation");
 const cart = require("./src/router/cart");
+const user = require("./src/router/user");
 
 // Endpoints de salud
 app.get('/api/test-cloudinary', (req, res) => {
@@ -199,6 +200,7 @@ app.use("/variations", variations);
 app.use("/categories", categories);
 app.use("/products", products);
 app.use("/product-variation", product_variation);
+app.use("/users", user);
 
 // ===================== MANEJO DE ERRORES =====================
 app.use((err, req, res, next) => {

@@ -22,12 +22,6 @@ let product_variation = {
        const product = await db.Product.findByPk(id_producto);
        const variation = await db.Variation.findByPk(id_variacion);
     
-    if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: 'Producto no encontrado'
-      });
-    }
     
     if (!variation) {
       return res.status(404).json({
